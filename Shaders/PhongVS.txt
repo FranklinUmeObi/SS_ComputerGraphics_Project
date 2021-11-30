@@ -1,0 +1,30 @@
+#version 330
+
+in vec3 vertex_position;
+in vec3 vertex_normal;
+in vec2 vertex_texture;
+
+out vec3 FragPos;
+out vec3 Normal;
+out vec3 LightPosJelly;
+out vec3 LightPosBulb;
+out vec2 TexCoord;
+
+vec4 LightPositionB = vec4 (-100,300,-200,1.0); //bulb
+vec4 LightPositionJ = vec4 (0,0,-15, 1.0); // jellyfish.
+
+uniform mat4 view;
+uniform mat4 proj;
+uniform mat4 model;
+
+void main()
+{
+    TexCoord = vertex_texture;
+    
+    gl_Position = proj * view * model * vec4(vertex_position, 1.0);
+    FragPos = vec3(view * model * vec4(vertex_position, 1.0));
+    Normal = mat3(transpose(inverse(view * model))) * (vertex_normal);
+    LightPosJelly = vec3(view * LightPositionJ);
+    LightPosBulb = vec3(view * LightPositionB);
+}
+
